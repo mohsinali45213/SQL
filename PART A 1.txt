@@ -2,8 +2,8 @@ PART A 1
 -- 1. Create the Simple DEPARTMENT Table
 CREATE TABLE DEPARTMENT (
     dept_no NUMBER PRIMARY KEY,
-    dept_name VARCHAR2(50),
-    location VARCHAR2(50)
+    dept_name VARCHAR2(20),
+    location VARCHAR2(20)
 );
 
 -- 2. Display structure of department table

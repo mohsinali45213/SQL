@@ -1,25 +1,25 @@
 PART A 4
 
-1. Create tables with constraints
-CREATE TABLE DEPART (
+--1. Create tables with constraints
+CREATE TABLE dept (
     dept_no NUMBER PRIMARY KEY,
-    dept_name VARCHAR2(100) UNIQUE,
+    dept_name VARCHAR2(20) UNIQUE,
     total_employees NUMBER CHECK (total_employees >= 0),
-    location VARCHAR2(100)
+    location VARCHAR2(20)
 );
 
-CREATE TABLE EMPLOYEE (
+CREATE TABLE emp (
     emp_id NUMBER PRIMARY KEY,
-    emp_name VARCHAR2(100) NOT NULL,
+    emp_name VARCHAR2(20) NOT NULL,
     birth_date DATE,
     gender VARCHAR2(10) CHECK (gender IN ('Male', 'Female')),
     dept_no NUMBER,
-    address VARCHAR2(200),
+    address VARCHAR2(50),
     designation VARCHAR2(50) CHECK (designation IN ('manager', 'clerk', 'leader', 'analyst', 'designer', 'coder', 'tester')),
     salary NUMBER CHECK (salary > 0),
     experience NUMBER,
-    email VARCHAR2(100),
-    FOREIGN KEY (dept_no) REFERENCES DEPART(dept_no)
+    email VARCHAR2(20),
+    FOREIGN KEY (dept_no) REFERENCES dept(dept_no)
 );
 
 CREATE TABLE PROJECT (
@@ -28,22 +28,22 @@ CREATE TABLE PROJECT (
     status VARCHAR2(50),
     start_date DATE,
     emp_id NUMBER,
-    FOREIGN KEY (emp_id) REFERENCES EMPLOYEE(emp_id)
+    FOREIGN KEY (emp_id) REFERENCES emp(emp_id)
 );
 
 
-2. Inserting Data into DEPART Table
-INSERT INTO DEPART VALUES (1, 'HR', 5, 'New York');
-INSERT INTO DEPART VALUES (2, 'IT', 10, 'Bangalore');
-INSERT INTO DEPART VALUES (3, 'Finance', 8, 'London');
-INSERT INTO DEPART VALUES (4, 'Marketing', 6, 'San Francisco');
-INSERT INTO DEPART VALUES (5, 'Operations', 12, 'Chicago');
+--2. Inserting Data into dept Table
+INSERT INTO dept VALUES (1, 'HR', 5, 'New York');
+INSERT INTO dept VALUES (2, 'IT', 10, 'Bangalore');
+INSERT INTO dept VALUES (3, 'Finance', 8, 'London');
+INSERT INTO dept VALUES (4, 'Marketing', 6, 'San Francisco');
+INSERT INTO dept VALUES (5, 'Operations', 12, 'Chicago');
 
-INSERT INTO EMPLOYEE VALUES (101, 'John Doe', TO_DATE('1990-05-15', 'YYYY-MM-DD'), 'Male', 1, 'New York', 'manager', 7000, 5, 'john@example.com');
-INSERT INTO EMPLOYEE VALUES (102, 'Jane Smith', TO_DATE('1992-08-21', 'YYYY-MM-DD'), 'Female', 2, 'Bangalore', 'coder', 5000, 3, 'jane@example.com');
-INSERT INTO EMPLOYEE VALUES (103, 'Alice Johnson', TO_DATE('1991-11-30', 'YYYY-MM-DD'), 'Female', 3, 'London', 'analyst', 6000, 4, 'alice@example.com');
-INSERT INTO EMPLOYEE VALUES (104, 'Bob Williams', TO_DATE('1989-09-25', 'YYYY-MM-DD'), 'Male', 4, 'San Francisco', 'designer', 6500, 6, 'bob@example.com');
-INSERT INTO EMPLOYEE VALUES (105, 'Charlie Brown', TO_DATE('1993-07-10', 'YYYY-MM-DD'), 'Male', 5, 'Chicago', 'tester', 5500, 2, 'charlie@example.com');
+INSERT INTO EMP VALUES (101, 'John Doe', TO_DATE('1990-05-15', 'YYYY-MM-DD'), 'Male', 1, 'New York', 'manager', 7000, 5, 'john@example.com');
+INSERT INTO EMP VALUES (102, 'Jane Smith', TO_DATE('1992-08-21', 'YYYY-MM-DD'), 'Female', 2, 'Bangalore', 'coder', 5000, 3, 'jane@example.com');
+INSERT INTO EMP VALUES (103, 'Alice Johnson', TO_DATE('1991-11-30', 'YYYY-MM-DD'), 'Female', 3, 'London', 'analyst', 6000, 4, 'alice@example.com');
+INSERT INTO EMP VALUES (104, 'Bob Williams', TO_DATE('1989-09-25', 'YYYY-MM-DD'), 'Male', 4, 'San Francisco', 'designer', 6500, 6, 'bob@example.com');
+INSERT INTO EMP VALUES (105, 'Charlie Brown', TO_DATE('1993-07-10', 'YYYY-MM-DD'), 'Male', 5, 'Chicago', 'tester', 5500, 2, 'charlie@example.com');
 
 INSERT INTO PROJECT VALUES (201, 'AI Development', 'Ongoing', TO_DATE('2023-01-10', 'YYYY-MM-DD'), 101);
 INSERT INTO PROJECT VALUES (202, 'Cloud Migration', 'Completed', TO_DATE('2022-05-20', 'YYYY-MM-DD'), 102);
@@ -52,37 +52,37 @@ INSERT INTO PROJECT VALUES (204, 'Marketing Campaign', 'Planned', TO_DATE('2024-
 INSERT INTO PROJECT VALUES (205, 'Logistics Optimization', 'Ongoing', TO_DATE('2023-09-10', 'YYYY-MM-DD'), 105);
 
 
-3. Delete departments with total employees < 1
-DELETE FROM DEPART WHERE total_employees < 1;
+--3. Delete departments with total employees < 1
+DELETE FROM dept WHERE total_employees < 1;
 
 
-4. Display female employees in descending order
-SELECT emp_name, designation FROM EMPLOYEE 
+--4. Display female employees in descending order
+SELECT emp_name, designation FROM EMP 
 WHERE gender = 'Female' 
 ORDER BY emp_name DESC;
 
 
-5. Display employees whose names start with 'A'
-SELECT * FROM EMPLOYEE 
+--5. Display employees whose names start with 'A'
+SELECT * FROM EMP 
 WHERE emp_name LIKE 'A%';
 
 
-6. Find the employee with the minimum salary
-SELECT emp_name, salary FROM EMPLOYEE 
-WHERE salary = (SELECT MIN(salary) FROM EMPLOYEE);
+--6. Find the employee with the minimum salary
+SELECT emp_name, salary FROM EMP 
+WHERE salary = (SELECT MIN(salary) FROM EMP);
 
 
-7. Add a 10% salary raise for employees in ‘CIVIL’ department
-UPDATE EMPLOYEE 
+--7. Add a 10% salary raise for employees in ‘CIVIL’ department
+UPDATE EMP 
 SET salary = salary * 1.10 
-WHERE dept_no IN (SELECT dept_no FROM DEPART WHERE dept_name = 'CIVIL');
+WHERE dept_no IN (SELECT dept_no FROM dept WHERE dept_name = 'CIVIL');
 
 
-8. Count total employees in ‘MCA’ department
-SELECT COUNT(*) FROM EMPLOYEE 
-WHERE dept_no = (SELECT dept_no FROM DEPART WHERE dept_name = 'MCA');
+--8. Count total employees in ‘MCA’ department
+SELECT COUNT(*) FROM EMP 
+WHERE dept_no = (SELECT dept_no FROM dept WHERE dept_name = 'MCA');
 
 
-9. List employees born in the current month
-SELECT * FROM EMPLOYEE 
+--9. List employees born in the current month
+SELECT * FROM EMP 
 WHERE EXTRACT(MONTH FROM birth_date) = EXTRACT(MONTH FROM SYSDATE);

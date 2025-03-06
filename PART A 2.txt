@@ -18,7 +18,7 @@ CREATE TABLE EMP (
     salary NUMBER CHECK (salary > 0),
     experience NUMBER,
     email VARCHAR2(20) UNIQUE,
-    CONSTRAINT fk_dept FOREIGN KEY (dept_no) REFERENCES DEPARTMENT(dept_no)
+    CONSTRAINT fk_dept FOREIGN KEY (dept_no) REFERENCES DEPARTMENT(dept_no) on delete cascade
 );
 
 -- 3. Describe the structure of the tables
@@ -73,6 +73,10 @@ SELECT D.dept_name, E.emp_name
 FROM EMP E 
 JOIN DEPARTMENT D ON E.dept_no = D.dept_no
 ORDER BY D.dept_name;
+
+or
+
+SELECT d.dept_name,e.emp_name FROM emp e,department d WHERE e.dept_no=d.dept_no order by d.dept_name;
 
 -- 11. Find the names of employees who have salary less than 5000 and greater than 2000
 SELECT emp_name FROM EMP WHERE salary BETWEEN 2000 AND 5000;
