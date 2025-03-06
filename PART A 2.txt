@@ -1,0 +1,81 @@
+PART A 2
+-- 1. Create DEPARTMENT Table with constraints
+CREATE TABLE DEPARTMENT (
+    dept_no NUMBER PRIMARY KEY,
+    dept_name VARCHAR2(20) UNIQUE,
+    location VARCHAR2(20)
+);
+
+-- 2. Create EMP Table with necessary constraints
+CREATE TABLE EMP (
+    emp_id NUMBER PRIMARY KEY,
+    emp_name VARCHAR2(20) NOT NULL,
+    birth_date DATE NOT NULL,
+    gender VARCHAR2(10) CHECK (gender IN ('Male', 'Female')),
+    dept_no NUMBER,
+    address VARCHAR2(20),
+    designation VARCHAR2(20) CHECK (designation IN ('manager', 'clerk', 'leader', 'analyst', 'designer', 'coder', 'tester')),
+    salary NUMBER CHECK (salary > 0),
+    experience NUMBER,
+    email VARCHAR2(20) UNIQUE,
+    CONSTRAINT fk_dept FOREIGN KEY (dept_no) REFERENCES DEPARTMENT(dept_no)
+);
+
+-- 3. Describe the structure of the tables
+DESC DEPARTMENT;
+DESC EMP;
+
+-- 4. Insert at least 5 records into DEPARTMENT
+INSERT INTO DEPARTMENT (dept_no, dept_name, location) VALUES (10, 'HR', 'New York');
+INSERT INTO DEPARTMENT (dept_no, dept_name, location) VALUES (20, 'IT', 'Bangalore');
+INSERT INTO DEPARTMENT (dept_no, dept_name, location) VALUES (30, 'Finance', 'Mumbai');
+INSERT INTO DEPARTMENT (dept_no, dept_name, location) VALUES (40, 'Marketing', 'Ahmedabad');
+INSERT INTO DEPARTMENT (dept_no, dept_name, location) VALUES (50, 'Operations', 'Delhi');
+
+COMMIT;
+
+-- 5. Insert at least 5 records into EMP
+INSERT INTO EMP (emp_id, emp_name, birth_date, gender, dept_no, address, designation, salary, experience, email)
+VALUES (1, 'John Doe', TO_DATE('1990-05-15', 'YYYY-MM-DD'), 'Male', 10, 'New York', 'manager', 7000, 5, 'john@example.com');
+
+INSERT INTO EMP (emp_id, emp_name, birth_date, gender, dept_no, address, designation, salary, experience, email)
+VALUES (2, 'Jane Smith', TO_DATE('1995-07-20', 'YYYY-MM-DD'), 'Female', 20, 'Bangalore', 'coder', 4000, 3, 'jane@example.com');
+
+INSERT INTO EMP (emp_id, emp_name, birth_date, gender, dept_no, address, designation, salary, experience, email)
+VALUES (3, 'Robert Brown', TO_DATE('1988-10-10', 'YYYY-MM-DD'), 'Male', 30, 'Mumbai', 'analyst', 6000, 7, 'robert@example.com');
+
+INSERT INTO EMP (emp_id, emp_name, birth_date, gender, dept_no, address, designation, salary, experience, email)
+VALUES (4, 'Emily Davis', TO_DATE('1993-03-25', 'YYYY-MM-DD'), 'Female', 40, 'Ahmedabad', 'designer', 3000, 4, 'emily@example.com');
+
+INSERT INTO EMP (emp_id, emp_name, birth_date, gender, dept_no, address, designation, salary, experience, email)
+VALUES (5, 'Michael Wilson', TO_DATE('1992-12-18', 'YYYY-MM-DD'), 'Male', 50, 'Delhi', 'tester', 2500, 2, 'michael@example.com');
+
+COMMIT;
+
+-- 6. Describe the structure of the tables (Repeated for verification)
+DESC DEPARTMENT;
+DESC EMP;
+
+-- 7. List all records of each table in ascending order
+SELECT * FROM DEPARTMENT ORDER BY dept_no;
+SELECT * FROM EMP ORDER BY emp_id;
+
+-- 8. Delete the department whose location is Ahmedabad
+DELETE FROM DEPARTMENT WHERE location = 'Ahmedabad';
+
+COMMIT;
+
+-- 9. Display female employee list
+SELECT * FROM EMP WHERE gender = 'Female';
+
+-- 10. Display department name-wise employee names
+SELECT D.dept_name, E.emp_name 
+FROM EMP E 
+JOIN DEPARTMENT D ON E.dept_no = D.dept_no
+ORDER BY D.dept_name;
+
+-- 11. Find the names of employees who have salary less than 5000 and greater than 2000
+SELECT emp_name FROM EMP WHERE salary BETWEEN 2000 AND 5000;
+
+-- 12. Display the names and designation of all female employees in descending order
+SELECT emp_name, designation FROM EMP WHERE gender = 'Female' ORDER BY emp_name DESC;

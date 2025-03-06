@@ -1,0 +1,88 @@
+PART A 3
+1. Create the tables with constraints
+CREATE TABLE STUDENT (
+    rollno NUMBER PRIMARY KEY,
+    name VARCHAR2(100) NOT NULL,
+    class VARCHAR2(50),
+    birthdate DATE
+);
+
+CREATE TABLE COURSE (
+    courseno NUMBER PRIMARY KEY,
+    coursename VARCHAR2(100) NOT NULL,
+    max_marks NUMBER CHECK (max_marks BETWEEN 0 AND 100),
+    pass_marks NUMBER CHECK (pass_marks BETWEEN 0 AND 100)
+);
+
+CREATE TABLE SC (
+    rollno NUMBER,
+    courseno NUMBER,
+    marks NUMBER CHECK (marks BETWEEN 0 AND 100),
+    PRIMARY KEY (rollno, courseno),
+    FOREIGN KEY (rollno) REFERENCES STUDENT(rollno),
+    FOREIGN KEY (courseno) REFERENCES COURSE(courseno)
+);
+
+
+2. Insert appropriate data
+
+INSERT INTO STUDENT VALUES (101, 'John Doe', 'CS', TO_DATE('2002-05-15', 'YYYY-MM-DD'));
+INSERT INTO STUDENT VALUES (102, 'Jane Smith', 'CS', TO_DATE('2003-08-21', 'YYYY-MM-DD'));
+INSERT INTO STUDENT VALUES (103, 'Alice Johnson', 'IT', TO_DATE('2001-11-30', 'YYYY-MM-DD'));
+INSERT INTO STUDENT VALUES (104, 'Bob Williams', 'ECE', TO_DATE('2002-09-25', 'YYYY-MM-DD'));
+INSERT INTO STUDENT VALUES (105, 'Charlie Brown', 'ME', TO_DATE('2003-07-10', 'YYYY-MM-DD'));
+
+INSERT INTO COURSE VALUES (1, 'Database Management System', 100, 40);
+INSERT INTO COURSE VALUES (2, 'Computer Networks', 100, 35);
+INSERT INTO COURSE VALUES (3, 'Operating Systems', 100, 45);
+INSERT INTO COURSE VALUES (4, 'Software Engineering', 100, 50);
+INSERT INTO COURSE VALUES (5, 'Data Structures', 100, 30);
+
+INSERT INTO SC VALUES (101, 1, 85);  -- John Doe - DBMS
+INSERT INTO SC VALUES (102, 1, 70);  -- Jane Smith - DBMS
+INSERT INTO SC VALUES (103, 2, 90);  -- Alice Johnson - CN
+INSERT INTO SC VALUES (104, 3, 75);  -- Bob Williams - OS
+INSERT INTO SC VALUES (105, 4, 80);  -- Charlie Brown - SE
+INSERT INTO SC VALUES (101, 2, 60);  -- John Doe - CN
+INSERT INTO SC VALUES (102, 3, 78);  -- Jane Smith - OS
+INSERT INTO SC VALUES (103, 4, 88);  -- Alice Johnson - SE
+INSERT INTO SC VALUES (104, 5, 65);  -- Bob Williams - DS
+INSERT INTO SC VALUES (105, 1, 55);  -- Charlie Brown - DBMS
+
+
+3. Constraint: Marks should be between 0 and 100
+(Already added in table creation with CHECK (marks BETWEEN 0 AND 100))
+
+
+4. Display details of students who take ‘Database Management System’
+SELECT S.* 
+FROM STUDENT S
+JOIN SC ON S.rollno = SC.rollno
+JOIN COURSE C ON SC.courseno = C.courseno
+WHERE C.coursename = 'Database Management System';
+
+
+5. Students who scored more than 70% in ‘Computer Networks’ and have not failed any subject
+SELECT S.name 
+FROM STUDENT S
+JOIN SC ON S.rollno = SC.rollno
+JOIN COURSE C ON SC.courseno = C.courseno
+WHERE C.coursename = 'Computer Networks' 
+AND SC.marks > (C.max_marks * 0.7)
+AND S.rollno NOT IN (
+    SELECT SC.rollno FROM SC 
+    JOIN COURSE C ON SC.courseno = C.courseno 
+    WHERE SC.marks < C.pass_marks
+);
+
+
+6. Display average marks obtained by each student
+SELECT S.rollno, S.name, AVG(SC.marks) AS average_marks
+FROM STUDENT S
+JOIN SC ON S.rollno = SC.rollno
+GROUP BY S.rollno, S.name;
+
+
+7. Select all courses where passing marks are more than 30% of average max marks
+SELECT * FROM COURSE 
+WHERE pass_marks > (SELECT AVG(max_marks) * 0.3 FROM COURSE);

@@ -1,0 +1,46 @@
+PART A 1
+-- 1. Create the Simple DEPARTMENT Table
+CREATE TABLE DEPARTMENT (
+    dept_no NUMBER PRIMARY KEY,
+    dept_name VARCHAR2(50),
+    location VARCHAR2(50)
+);
+
+-- 2. Display structure of department table
+DESC DEPARTMENT;
+
+-- 3. Insert below records into Department Table
+INSERT INTO DEPARTMENT (dept_no, dept_name, location) VALUES (10, 'Account', 'NY');
+INSERT INTO DEPARTMENT (dept_no, dept_name, location) VALUES (20, 'HR', 'NY');
+INSERT INTO DEPARTMENT (dept_no, dept_name, location) VALUES (30, 'Production', 'DL');
+INSERT INTO DEPARTMENT (dept_no, dept_name, location) VALUES (40, 'Sales', 'NY');
+INSERT INTO DEPARTMENT (dept_no, dept_name, location) VALUES (50, 'EDP', 'MU');
+INSERT INTO DEPARTMENT (dept_no, dept_name, location) VALUES (60, 'TRG', 'AH');
+INSERT INTO DEPARTMENT (dept_no, dept_name, location) VALUES (110, 'RND', 'AH');
+
+COMMIT;
+
+-- 4. Display all records of Department table
+SELECT * FROM DEPARTMENT;
+
+-- 5. Display all departments belonging to location 'NY'
+SELECT * FROM DEPARTMENT WHERE location = 'NY';
+
+-- 6. Display details of Department 10
+SELECT * FROM DEPARTMENT WHERE dept_no = 10;
+
+-- 7. List all department names starting with 'A'
+SELECT * FROM DEPARTMENT WHERE dept_name LIKE 'A%';
+
+-- 8. List all departments whose number is between 1 and 100
+SELECT * FROM DEPARTMENT WHERE dept_no BETWEEN 1 AND 100;
+
+-- 9. Delete 'TRG' department
+DELETE FROM DEPARTMENT WHERE dept_name = 'TRG';
+
+COMMIT;
+
+-- 10. Change department name 'EDP' to 'IT'
+UPDATE DEPARTMENT SET dept_name = 'IT' WHERE dept_name = 'EDP';
+
+COMMIT;
